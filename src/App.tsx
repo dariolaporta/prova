@@ -9,11 +9,10 @@ import {
 } from "./api/fakeAPI";
 import Alert from "@material-ui/lab/Alert";
 import HorizontalNonLinearStepper from "./components/stepper/Stepper";
+import { View } from "./components/View";
+import { KeyValue } from "./types";
+import Slide from '@material-ui/core/Slide';
 
-type KeyValue = {
-  label: string;
-  completed: boolean;
-};
 interface State {
   email: string;
   name: string;
@@ -44,7 +43,7 @@ export default class App extends Component<{}, State> {
       { label: "email", completed: false },
       { label: "name", completed: false },
       { label: "year", completed: false },
-    ],
+    ]
   };
 
   callEmailAPI = async (email: string) => {
@@ -57,12 +56,12 @@ export default class App extends Component<{}, State> {
             { label: "email", completed: true },
             { label: "name", completed: false },
             { label: "year", completed: false },
-          ],
+          ]
         });
     } catch (error) {
       this.setState({
         emailError: true,
-        emailErrorMessage: error.message,
+        emailErrorMessage: error.message
       });
     }
   };
@@ -76,7 +75,7 @@ export default class App extends Component<{}, State> {
             { label: "email", completed: true },
             { label: "name", completed: true },
             { label: "year", completed: false },
-          ],
+          ]
         });
     } catch (error) {
       this.setState({ nameError: true, nameErrorMessage: error.message });
@@ -92,7 +91,7 @@ export default class App extends Component<{}, State> {
             { label: "email", completed: true },
             { label: "name", completed: true },
             { label: "year", completed: true },
-          ],
+          ]
         });
         alert("registrazione completata");
       }
@@ -113,7 +112,7 @@ export default class App extends Component<{}, State> {
       yearErrorMessage,
       emailErrorMessage,
       nameErrorMessage,
-      stepIndicator,
+      stepIndicator
     } = this.state;
 
     const ViewStyle = {
@@ -133,113 +132,86 @@ export default class App extends Component<{}, State> {
         />
         {activeIndex === 0 && (
           <div style={ViewStyle}>
-            <div className="App-wrapper">
-              <Input
-                getOutputValue={(text) => this.setState({ email: text })}
-                label="email"
-                placeholder="inserisci email"
-                error={emailError}
-                onFocusEvent={() => this.setState({ emailError: false })}
-              />
-              <Button
-                style={{ marginTop: 40 }}
-                variant="contained"
-                color="primary"
-                onClick={() => this.callEmailAPI(email)}
-              >
-                Invia
-              </Button>
-              {emailError && (
-                <div
-                  style={{
-                    flex: 1,
-                    left: 0,
-                    right: 0,
-                    position: "absolute",
-                    bottom: "20%",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
+            <Slide direction={window.innerWidth > 800 ? 'up' : 'left'} in={activeIndex === 0}>
+              <div className="App-wrapper">
+                <Input
+                  getOutputValue={(text) => this.setState({ email: text })}
+                  label="email"
+                  placeholder="inserisci email"
+                  error={emailError}
+                  onFocusEvent={() => this.setState({ emailError: false })}
+                />
+                <Button
+                  style={{ marginTop: 40 }}
+                  variant="contained"
+                  color="primary"
+                  onClick={() => this.callEmailAPI(email)}
                 >
-                  <Alert severity="error">{emailErrorMessage}</Alert>
-                </div>
-              )}
-            </div>
+                  Invia
+                </Button>
+                {emailError && (
+                  <View>
+                    <Alert severity="error">{emailErrorMessage}</Alert>
+                  </View>
+                )}
+              </div>
+            </Slide>
           </div>
         )}
         {activeIndex === 1 && (
           <div style={ViewStyle}>
-            <div className="App-wrapper">
-              <Input
-                getOutputValue={(text) => this.setState({ name: text })}
-                label="nome"
-                placeholder="inserisci il tuo nome"
-                error={nameError}
-                onFocusEvent={() => this.setState({ nameError: false })}
-              />
-              <Button
-                style={{ marginTop: 40 }}
-                variant="contained"
-                color="primary"
-                onClick={() => this.callNameAPI(name)}
-              >
-                Invia
-              </Button>
-              {nameError && (
-                <div
-                  style={{
-                    flex: 1,
-                    left: 0,
-                    right: 0,
-                    position: "absolute",
-                    bottom: "20%",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
+            <Slide direction={window.innerWidth > 800 ? 'up' : 'left'} in={activeIndex === 1}>
+              <div className="App-wrapper">
+                <Input
+                  getOutputValue={(text) => this.setState({ name: text })}
+                  label="nome"
+                  placeholder="inserisci il tuo nome"
+                  error={nameError}
+                  onFocusEvent={() => this.setState({ nameError: false })}
+                />
+                <Button
+                  style={{ marginTop: 40 }}
+                  variant="contained"
+                  color="primary"
+                  onClick={() => this.callNameAPI(name)}
                 >
-                  <Alert severity="error">{nameErrorMessage}</Alert>
-                </div>
-              )}
-            </div>
+                  Invia
+                </Button>
+                {nameError && (
+                  <View>
+                    <Alert severity="error">{nameErrorMessage}</Alert>
+                  </View>
+                )}
+              </div>
+            </Slide>
           </div>
         )}
         {activeIndex === 2 && (
           <div style={ViewStyle}>
-            <div className="App-wrapper">
-              <Input
-                getOutputValue={(text) => this.setState({ year: text })}
-                error={yearError}
-                label="anno di nascita"
-                placeholder="inserisci anno di nascita"
-                onFocusEvent={() => this.setState({ yearError: false })}
-              />
-              <Button
-                style={{ marginTop: 40 }}
-                variant="contained"
-                color="primary"
-                onClick={() => this.callYearAPI(year)}
-              >
-                Invia
-              </Button>
-              {yearError && (
-                <div
-                  style={{
-                    flex: 1,
-                    left: 0,
-                    right: 0,
-                    position: "absolute",
-                    bottom: "20%",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
+            <Slide direction={window.innerWidth > 800 ? 'up' : 'left'} in={activeIndex === 2}>
+              <div className="App-wrapper">
+                <Input
+                  getOutputValue={(text) => this.setState({ year: text })}
+                  error={yearError}
+                  label="anno di nascita"
+                  placeholder="inserisci anno di nascita"
+                  onFocusEvent={() => this.setState({ yearError: false })}
+                />
+                <Button
+                  style={{ marginTop: 40 }}
+                  variant="contained"
+                  color="primary"
+                  onClick={() => this.callYearAPI(year)}
                 >
-                  <Alert severity="error">{yearErrorMessage}</Alert>
-                </div>
-              )}
-            </div>
+                  Invia
+                </Button>
+                {yearError && (
+                  <View>
+                    <Alert severity="error">{yearErrorMessage}</Alert>
+                  </View>
+                )}
+              </div>
+            </Slide>
           </div>
         )}
       </div>

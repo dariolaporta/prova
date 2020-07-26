@@ -1,11 +1,11 @@
 import React from "react";
-import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
 import StepButton from "@material-ui/core/StepButton";
+import { KeyValue } from "../../types";
 
 interface Props {
-  steps: any[];
+  steps: KeyValue[];
   activeIndex: number;
 }
 
@@ -14,7 +14,7 @@ export default function HorizontalNonLinearStepper(props: Props) {
 
   return (
     <div
-      style={{ position: "fixed", top: 0, left: 0, right: 0 }}
+      style={{ position: "fixed", top: 0, left: 0, right: 0 , zIndex: 20}}
       className="shadow"
     >
       <Stepper nonLinear activeStep={Number(activeIndex)}>
