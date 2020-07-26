@@ -170,9 +170,7 @@ export default class App extends Component<{}, State> {
         )}
         {activeIndex === 1 && (
           <div style={ViewStyle}>
-            <div
-              style={{ display: "flex", flexDirection: "column", width: "30%" }}
-            >
+            <div className="App-wrapper">
               <Input
                 getOutputValue={(text) => this.setState({ name: text })}
                 label="nome"
@@ -209,11 +207,10 @@ export default class App extends Component<{}, State> {
         )}
         {activeIndex === 2 && (
           <div style={ViewStyle}>
-            <div
-              style={{ display: "flex", flexDirection: "column", width: "30%" }}
-            >
+            <div className="App-wrapper">
               <Input
                 getOutputValue={(text) => this.setState({ year: text })}
+                error={yearError}
                 label="anno di nascita"
                 placeholder="inserisci anno di nascita"
                 onFocusEvent={() => this.setState({ yearError: false })}
