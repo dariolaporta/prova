@@ -4,7 +4,8 @@ const isValidEmailFormat = (mail: string) => {
 };
 
 const hasWhiteSpace = (s: string) => {
-  return /\s/g.test(s);
+  const format = /\w+.*$/
+  return s.match(format);
 };
 
 export const fakeEmailPromise = (param: string) => {

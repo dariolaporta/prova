@@ -6,6 +6,14 @@
   box-shadow: 0px 1px 5px #aaaaaa;
 }
 
+.MuiPaper-root {
+  background-color: #f3f3f3!important;
+}
+
+.MuiStepper-horizontal{
+  width: 100%;
+}
+
 .App-wrapper {
   display: flex;
   flex-direction: column;

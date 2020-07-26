@@ -14,16 +14,17 @@ export default function HorizontalNonLinearStepper(props: Props) {
 
   return (
     <div
-      style={{ position: "fixed", top: 0, left: 0, right: 0 , zIndex: 20}}
-      className="shadow"
+      style={{paddingTop: 20, position: "fixed", top: 0, left: 0, right: 0 , zIndex: 20, display: "flex", justifyContent: "center"}}
     >
-      <Stepper nonLinear activeStep={Number(activeIndex)}>
-        {steps.map((el, index) => (
-          <Step key={index}>
-            <StepButton completed={el.completed}></StepButton>
-          </Step>
-        ))}
-      </Stepper>
+      <div className="App-wrapper">
+        <Stepper nonLinear activeStep={Number(activeIndex)}>
+          {steps.map((el, index) => (
+            <Step key={index}>
+              <StepButton completed={el.completed}></StepButton>
+            </Step>
+          ))}
+        </Stepper>
+      </div>
     </div>
   );
 }
