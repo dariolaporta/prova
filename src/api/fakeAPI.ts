@@ -4,8 +4,13 @@ const isValidEmailFormat = (mail: string) => {
 };
 
 const hasWhiteSpace = (s: string) => {
-  const format = /\w+.*$/
-  return s.match(format);
+  const format = /^\s+$/;
+  return s.match(format) ? true : false;
+};
+
+const passwordValid = (s: string) => {
+  const format = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
+  return s.match(format) ? true : false;
 };
 
 export const fakeEmailPromise = (param: string) => {
@@ -18,11 +23,14 @@ export const fakeEmailPromise = (param: string) => {
   });
 };
 
-export const fakeNamePromise = (param: string) => {
+export const fakePasswordPromise = (param: string) => {
   return new Promise((resolve, reject) => {
-    const isValid = hasWhiteSpace(param);
-    if (!isValid) {
-      throw new Error("Inserire nome e cognome");
+    const whiteSpace = hasWhiteSpace(param);
+    const passwordNotValid = passwordValid(param);
+    if (whiteSpace || !passwordNotValid) {
+      throw new Error(
+        "La password deve contenere minimo 8 cifre di cui almeno un carattere maiuscolo e un numero"
+      );
     }
     resolve({ code: 200, success: true });
   });

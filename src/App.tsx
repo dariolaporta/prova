@@ -4,24 +4,24 @@ import Input from "./components/input/Input";
 import { Button } from "@material-ui/core";
 import {
   fakeEmailPromise,
-  fakeNamePromise,
   fakeYearPromise,
+  fakePasswordPromise,
 } from "./api/fakeAPI";
 import Alert from "@material-ui/lab/Alert";
 import HorizontalNonLinearStepper from "./components/stepper/Stepper";
 import { View } from "./components/View";
 import { KeyValue } from "./types";
-import Slide from '@material-ui/core/Slide';
+import Slide from "@material-ui/core/Slide";
 
 interface State {
   email: string;
-  name: string;
+  password: string;
   year: number;
   activeIndex: number;
   emailError: boolean;
   emailErrorMessage: string;
-  nameError: boolean;
-  nameErrorMessage: string;
+  passwordError: boolean;
+  passwordErrorMessage: string;
   yearError: boolean;
   yearErrorMessage: string;
   stepIndicator: KeyValue[];
@@ -31,19 +31,19 @@ export default class App extends Component<{}, State> {
   state: State = {
     activeIndex: 0,
     email: "",
-    name: "",
+    password: "",
     year: 0,
     emailError: false,
     emailErrorMessage: "",
-    nameError: false,
-    nameErrorMessage: "",
+    passwordError: false,
+    passwordErrorMessage: "",
     yearError: false,
     yearErrorMessage: "",
     stepIndicator: [
       { label: "email", completed: false },
-      { label: "name", completed: false },
+      { label: "password", completed: false },
       { label: "year", completed: false },
-    ]
+    ],
   };
 
   callEmailAPI = async (email: string) => {
@@ -54,31 +54,34 @@ export default class App extends Component<{}, State> {
           activeIndex: this.state.activeIndex + 1,
           stepIndicator: [
             { label: "email", completed: true },
-            { label: "name", completed: false },
+            { label: "password", completed: false },
             { label: "year", completed: false },
-          ]
+          ],
         });
     } catch (error) {
       this.setState({
         emailError: true,
-        emailErrorMessage: error.message
+        emailErrorMessage: error.message,
       });
     }
   };
-  callNameAPI = async (name: string) => {
+  callPassworAPI = async (name: string) => {
     try {
-      const res = await fakeNamePromise(name);
+      const res = await fakePasswordPromise(name);
       if (res)
         this.setState({
           activeIndex: this.state.activeIndex + 1,
           stepIndicator: [
             { label: "email", completed: true },
-            { label: "name", completed: true },
+            { label: "password", completed: true },
             { label: "year", completed: false },
-          ]
+          ],
         });
     } catch (error) {
-      this.setState({ nameError: true, nameErrorMessage: error.message });
+      this.setState({
+        passwordError: true,
+        passwordErrorMessage: error.message,
+      });
     }
   };
 
@@ -89,9 +92,9 @@ export default class App extends Component<{}, State> {
         this.setState({
           stepIndicator: [
             { label: "email", completed: true },
-            { label: "name", completed: true },
+            { label: "password", completed: true },
             { label: "year", completed: true },
-          ]
+          ],
         });
         alert("registrazione completata");
       }
@@ -103,16 +106,16 @@ export default class App extends Component<{}, State> {
   render() {
     const {
       email,
-      name,
+      password,
       year,
       activeIndex,
       emailError,
-      nameError,
+      passwordError,
       yearError,
       yearErrorMessage,
       emailErrorMessage,
-      nameErrorMessage,
-      stepIndicator
+      passwordErrorMessage,
+      stepIndicator,
     } = this.state;
 
     const ViewStyle = {
@@ -132,7 +135,10 @@ export default class App extends Component<{}, State> {
         />
         {activeIndex === 0 && (
           <div style={ViewStyle}>
-            <Slide direction={window.innerWidth > 800 ? 'up' : 'left'} in={activeIndex === 0}>
+            <Slide
+              direction={window.innerWidth > 800 ? "up" : "left"}
+              in={activeIndex === 0}
+            >
               <div className="App-wrapper">
                 <Input
                   getOutputValue={(text) => this.setState({ email: text })}
@@ -160,26 +166,29 @@ export default class App extends Component<{}, State> {
         )}
         {activeIndex === 1 && (
           <div style={ViewStyle}>
-            <Slide direction={window.innerWidth > 800 ? 'up' : 'left'} in={activeIndex === 1}>
+            <Slide
+              direction={window.innerWidth > 800 ? "up" : "left"}
+              in={activeIndex === 1}
+            >
               <div className="App-wrapper">
                 <Input
-                  getOutputValue={(text) => this.setState({ name: text })}
-                  label="nome"
-                  placeholder="inserisci il tuo nome"
-                  error={nameError}
-                  onFocusEvent={() => this.setState({ nameError: false })}
+                  getOutputValue={(text) => this.setState({ password: text })}
+                  label="password"
+                  placeholder="Scegli la tua password"
+                  error={passwordError}
+                  onFocusEvent={() => this.setState({ passwordError: false })}
                 />
                 <Button
                   style={{ marginTop: 40 }}
                   variant="contained"
                   color="primary"
-                  onClick={() => this.callNameAPI(name)}
+                  onClick={() => this.callPassworAPI(password)}
                 >
                   Invia
                 </Button>
-                {nameError && (
+                {passwordError && (
                   <View>
-                    <Alert severity="error">{nameErrorMessage}</Alert>
+                    <Alert severity="error">{passwordErrorMessage}</Alert>
                   </View>
                 )}
               </div>
@@ -188,7 +197,10 @@ export default class App extends Component<{}, State> {
         )}
         {activeIndex === 2 && (
           <div style={ViewStyle}>
-            <Slide direction={window.innerWidth > 800 ? 'up' : 'left'} in={activeIndex === 2}>
+            <Slide
+              direction={window.innerWidth > 800 ? "up" : "left"}
+              in={activeIndex === 2}
+            >
               <div className="App-wrapper">
                 <Input
                   getOutputValue={(text) => this.setState({ year: text })}
