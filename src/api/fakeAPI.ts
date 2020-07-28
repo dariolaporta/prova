@@ -17,7 +17,7 @@ export const fakeEmailPromise = (param: string) => {
   return new Promise((resolve, reject) => {
     const isValid = isValidEmailFormat(param);
     if (!isValid) {
-      throw new Error("la mail inserita non è valida");
+      reject("la mail inserita non è valida");
     }
     resolve({ code: 200, success: true });
   });
@@ -28,7 +28,7 @@ export const fakePasswordPromise = (param: string) => {
     const whiteSpace = hasWhiteSpace(param);
     const passwordNotValid = passwordValid(param);
     if (whiteSpace || !passwordNotValid) {
-      throw new Error(
+      reject(
         "La password deve contenere minimo 8 cifre di cui almeno un carattere maiuscolo e un numero"
       );
     }
@@ -39,11 +39,9 @@ export const fakePasswordPromise = (param: string) => {
 export const fakeYearPromise = (param: number) => {
   return new Promise((resolve, reject) => {
     const isValid = isNaN(param);
-    if (isValid) {
-      throw new Error("Devi inserire un numero ");
-    }
+    if (isValid) reject("Devi inserire un numero");
     if (param < 1990 || param > 2006) {
-      throw new Error("Devi inserire un numero compreso tra 1990 e 2006 ");
+      reject("Devi inserire un numero compreso tra 1990 e 2006 ");
     }
     resolve({ code: 200, success: true });
   });

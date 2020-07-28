@@ -2,10 +2,10 @@ import React from "react";
 import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
 import StepButton from "@material-ui/core/StepButton";
-import { KeyValue } from "../../types";
+import { StepIndicator } from "../../types";
 
 interface Props {
-  steps: KeyValue[];
+  steps: StepIndicator[];
   activeIndex: number;
 }
 
@@ -14,7 +14,16 @@ export default function HorizontalNonLinearStepper(props: Props) {
 
   return (
     <div
-      style={{paddingTop: 20, position: "fixed", top: 0, left: 0, right: 0 , zIndex: 20, display: "flex", justifyContent: "center"}}
+      style={{
+        paddingTop: 20,
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 20,
+        display: "flex",
+        justifyContent: "center",
+      }}
     >
       <div className="App-wrapper">
         <Stepper nonLinear activeStep={Number(activeIndex)}>

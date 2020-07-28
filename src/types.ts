@@ -1,4 +1,3 @@
-export type KeyValue = {
-    label: string;
-    completed: boolean;
+export type StepIndicator = {
+  completed: boolean;
 };

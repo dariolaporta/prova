@@ -10,7 +10,7 @@ import {
 import Alert from "@material-ui/lab/Alert";
 import HorizontalNonLinearStepper from "./components/stepper/Stepper";
 import { View } from "./components/View";
-import { KeyValue } from "./types";
+import { StepIndicator } from "./types";
 import Slide from "@material-ui/core/Slide";
 
 interface State {
@@ -18,13 +18,9 @@ interface State {
   password: string;
   year: number;
   activeIndex: number;
-  emailError: boolean;
-  emailErrorMessage: string;
-  passwordError: boolean;
-  passwordErrorMessage: string;
-  yearError: boolean;
-  yearErrorMessage: string;
-  stepIndicator: KeyValue[];
+  isError: boolean;
+  stepIndicator: StepIndicator[];
+  errorMessage: string;
 }
 
 export default class App extends Component<{}, State> {
@@ -33,73 +29,68 @@ export default class App extends Component<{}, State> {
     email: "",
     password: "",
     year: 0,
-    emailError: false,
-    emailErrorMessage: "",
-    passwordError: false,
-    passwordErrorMessage: "",
-    yearError: false,
-    yearErrorMessage: "",
+    isError: false,
+    errorMessage: "",
     stepIndicator: [
-      { label: "email", completed: false },
-      { label: "password", completed: false },
-      { label: "year", completed: false },
+      { completed: false },
+      { completed: false },
+      { completed: false },
     ],
   };
 
   callEmailAPI = async (email: string) => {
+    const steps = [...this.state.stepIndicator];
+    const item = steps[0];
+    item.completed = true;
     try {
       const res = await fakeEmailPromise(email);
       if (res)
         this.setState({
           activeIndex: this.state.activeIndex + 1,
-          stepIndicator: [
-            { label: "email", completed: true },
-            { label: "password", completed: false },
-            { label: "year", completed: false },
-          ],
+          stepIndicator: steps,
         });
     } catch (error) {
       this.setState({
-        emailError: true,
-        emailErrorMessage: error.message,
+        isError: true,
+        errorMessage: error,
       });
     }
   };
+
   callPassworAPI = async (name: string) => {
+    const steps = [...this.state.stepIndicator];
+    const item = steps[1];
+    item.completed = true;
     try {
       const res = await fakePasswordPromise(name);
       if (res)
         this.setState({
           activeIndex: this.state.activeIndex + 1,
-          stepIndicator: [
-            { label: "email", completed: true },
-            { label: "password", completed: true },
-            { label: "year", completed: false },
-          ],
+          stepIndicator: steps,
         });
     } catch (error) {
       this.setState({
-        passwordError: true,
-        passwordErrorMessage: error.message,
+        isError: true,
+        errorMessage: error,
       });
     }
   };
 
   callYearAPI = async (year: number) => {
+    const steps = [...this.state.stepIndicator];
+    const item = steps[2];
+    item.completed = true;
     try {
       const res = await fakeYearPromise(year);
       if (res) {
         this.setState({
-          stepIndicator: [
-            { label: "email", completed: true },
-            { label: "password", completed: true },
-            { label: "year", completed: true },
-          ],
+          activeIndex: 0,
+          stepIndicator: steps,
         });
         alert("registrazione completata");
       }
     } catch (error) {
-      this.setState({ yearError: true, yearErrorMessage: error.message });
+      this.setState({ isError: true, errorMessage: error });
     }
   };
 
@@ -109,12 +100,8 @@ export default class App extends Component<{}, State> {
       password,
       year,
       activeIndex,
-      emailError,
-      passwordError,
-      yearError,
-      yearErrorMessage,
-      emailErrorMessage,
-      passwordErrorMessage,
+      isError,
+      errorMessage,
       stepIndicator,
     } = this.state;
 
@@ -133,6 +120,11 @@ export default class App extends Component<{}, State> {
           steps={stepIndicator}
           activeIndex={activeIndex}
         />
+        {isError && (
+          <View>
+            <Alert severity="error">{errorMessage}</Alert>
+          </View>
+        )}
         {activeIndex === 0 && (
           <div style={ViewStyle}>
             <Slide
@@ -144,8 +136,8 @@ export default class App extends Component<{}, State> {
                   getOutputValue={(text) => this.setState({ email: text })}
                   label="email"
                   placeholder="inserisci email"
-                  error={emailError}
-                  onFocusEvent={() => this.setState({ emailError: false })}
+                  error={isError}
+                  onFocusEvent={() => this.setState({ isError: false })}
                 />
                 <Button
                   style={{ marginTop: 40 }}
@@ -155,11 +147,6 @@ export default class App extends Component<{}, State> {
                 >
                   Invia
                 </Button>
-                {emailError && (
-                  <View>
-                    <Alert severity="error">{emailErrorMessage}</Alert>
-                  </View>
-                )}
               </div>
             </Slide>
           </div>
@@ -175,8 +162,8 @@ export default class App extends Component<{}, State> {
                   getOutputValue={(text) => this.setState({ password: text })}
                   label="password"
                   placeholder="Scegli la tua password"
-                  error={passwordError}
-                  onFocusEvent={() => this.setState({ passwordError: false })}
+                  error={isError}
+                  onFocusEvent={() => this.setState({ isError: false })}
                 />
                 <Button
                   style={{ marginTop: 40 }}
@@ -186,11 +173,6 @@ export default class App extends Component<{}, State> {
                 >
                   Invia
                 </Button>
-                {passwordError && (
-                  <View>
-                    <Alert severity="error">{passwordErrorMessage}</Alert>
-                  </View>
-                )}
               </div>
             </Slide>
           </div>
@@ -204,10 +186,10 @@ export default class App extends Component<{}, State> {
               <div className="App-wrapper">
                 <Input
                   getOutputValue={(text) => this.setState({ year: text })}
-                  error={yearError}
+                  error={isError}
                   label="anno di nascita"
                   placeholder="inserisci anno di nascita"
-                  onFocusEvent={() => this.setState({ yearError: false })}
+                  onFocusEvent={() => this.setState({ isError: false })}
                 />
                 <Button
                   style={{ marginTop: 40 }}
@@ -217,11 +199,6 @@ export default class App extends Component<{}, State> {
                 >
                   Invia
                 </Button>
-                {yearError && (
-                  <View>
-                    <Alert severity="error">{yearErrorMessage}</Alert>
-                  </View>
-                )}
               </div>
             </Slide>
           </div>
